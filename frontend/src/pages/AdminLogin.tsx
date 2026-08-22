@@ -4,26 +4,76 @@ import { useAuth } from '@/auth';
 import { navigate } from '@/router';
 import { useI18n } from '@/i18n';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 export function AdminLogin() {
   const { login } = useAuth();
   const { t } = useI18n();
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
   const [shake, setShake] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!password) {
       setError(true);
       triggerShake();
       return;
     }
-    const ok = login(password);
-    if (ok) {
-      navigate('/admin');
-    } else {
-      setError(true);
-      triggerShake();
+    
+    setLoading(true);
+    setError(false);
+    
+    try {
+      // Try to authenticate with the backend
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ password })
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Login successful:', data);
+        
+        // Save the token
+        sessionStorage.setItem('festival_admin_auth_v1', 'true');
+        sessionStorage.setItem('festival_admin_token', data.token || password);
+        
+        // Update auth context
+        login(password);
+        
+        // Navigate to admin
+        navigate('/admin');
+      } else {
+        // Fallback to local authentication
+        const ok = login(password);
+        if (ok) {
+          sessionStorage.setItem('festival_admin_auth_v1', 'true');
+          sessionStorage.setItem('festival_admin_token', password);
+          navigate('/admin');
+        } else {
+          setError(true);
+          triggerShake();
+        }
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      // Fallback to local authentication
+      const ok = login(password);
+      if (ok) {
+        sessionStorage.setItem('festival_admin_auth_v1', 'true');
+        sessionStorage.setItem('festival_admin_token', password);
+        navigate('/admin');
+      } else {
+        setError(true);
+        triggerShake();
+      }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -70,11 +120,12 @@ export function AdminLogin() {
                 }}
                 placeholder="••••••••"
                 autoFocus
+                disabled={loading}
                 className={`w-full rounded-2xl border-2 py-3.5 pl-11 pr-4 font-ethiopic text-base outline-none transition focus:ring-4 ${
                   error
                     ? 'border-terracotta-500 bg-terracotta-50 focus:ring-terracotta-200'
                     : 'border-cream-300 bg-cream-50 focus:border-sunflower-400 focus:ring-sunflower-100'
-                }`}
+                } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
               />
             </div>
             {error && (
@@ -85,10 +136,20 @@ export function AdminLogin() {
 
             <button
               type="submit"
-              className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-terracotta-500 px-6 py-3.5 font-ethiopic text-base font-bold text-white transition hover:bg-terracotta-600 active:scale-95"
+              disabled={loading}
+              className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-terracotta-500 px-6 py-3.5 font-ethiopic text-base font-bold text-white transition hover:bg-terracotta-600 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {t('loginBtn')}
-              <ArrowRight className="h-4 w-4" />
+              {loading ? (
+                <>
+                  <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  Logging in...
+                </>
+              ) : (
+                <>
+                  {t('loginBtn')}
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              )}
             </button>
           </form>
 

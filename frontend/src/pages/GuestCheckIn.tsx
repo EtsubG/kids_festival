@@ -5,11 +5,13 @@ import { useParticipants } from '@/store';
 import { navigate } from '@/router';
 import { Confetti } from '@/components/Confetti';
 import { useI18n } from '@/i18n';
+
+// Import your images - make sure these exist
 import photo1 from '@/assets/photo1.jpg';
 import photo2 from '@/assets/photo2.jpg';
 import photo3 from '@/assets/photo3.jpg';
 
-const HERO_PHOTOS = [ photo1,photo2,photo3 ];
+const HERO_PHOTOS = [photo1, photo2, photo3];
 
 export function GuestCheckIn() {
   const { addParticipant } = useParticipants();
@@ -18,31 +20,72 @@ export function GuestCheckIn() {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [nameError, setNameError] = useState(false);
   const [result, setResult] = useState<number | null>(null);
+  const [resultName, setResultName] = useState('');
   const [confetti, setConfetti] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const allAnswered = QUESTIONS.every((q) => answers[q.id]);
   const canSubmit = name.trim().length > 0 && allAnswered;
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (!name.trim()) {
       setNameError(true);
       return;
     }
     if (!allAnswered) return;
-    const participant = addParticipant(name, answers);
-    setResult(participant.luckyNumber);
-    setConfetti(true);
-    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+    
+    setIsSubmitting(true);
+    
+    try {
+      console.log('📝 Submitting registration:', { name, answers });
+      
+      const participant = await addParticipant(name, answers);
+      console.log('✅ Registration result:', participant);
+      
+      // Store the name and lucky number for the result screen
+      setResultName(participant.name);
+      setResult(participant.luckyNumber);
+      
+      // Trigger confetti after a small delay
+      setTimeout(() => {
+        setConfetti(true);
+      }, 100);
+      
+      // Scroll to top to show result
+      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 200);
+      
+    } catch (error) {
+      console.error('❌ Registration failed:', error);
+      // You might want to show an error message here
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   function selectOption(qid: string, value: string) {
     setAnswers((prev) => ({ ...prev, [qid]: value }));
   }
 
+  function handleRegisterAnother() {
+    // First hide confetti
+    setConfetti(false);
+    // Then reset the form after a small delay
+    setTimeout(() => {
+      setResult(null);
+      setResultName('');
+      setName('');
+      setAnswers({});
+      setNameError(false);
+    }, 300);
+  }
+
+  // Result screen - show after successful registration
   if (result !== null) {
+    console.log('🎉 Showing result screen:', { resultName, result });
+    
     return (
       <>
-        <Confetti active={confetti} />
+        {confetti && <Confetti active={confetti} count={80} />}
         <div className="mx-auto w-full max-w-xl px-4 py-10 sm:py-16">
           <div className="animate-pop-in rounded-3xl bg-white p-8 text-center card-shadow-lg sm:p-12">
             <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-sunflower-100 text-4xl">
@@ -75,17 +118,13 @@ export function GuestCheckIn() {
                 <Sparkles className="h-4 w-4 text-sunflower-500" />
                 {t('guestName')}
               </p>
-              <p className="font-ethiopic text-lg font-bold text-terracotta-900">{name}</p>
+              <p className="font-ethiopic text-lg font-bold text-terracotta-900">
+                {resultName || name}
+              </p>
             </div>
 
             <button
-              onClick={() => {
-                setResult(null);
-                setConfetti(false);
-                setName('');
-                setAnswers({});
-                setNameError(false);
-              }}
+              onClick={handleRegisterAnother}
               className="mt-8 inline-flex items-center gap-2 rounded-full bg-terracotta-500 px-6 py-3 font-ethiopic text-sm font-semibold text-white transition hover:bg-terracotta-600 active:scale-95"
             >
               {t('registerAnother')}
@@ -97,6 +136,7 @@ export function GuestCheckIn() {
     );
   }
 
+  // Registration form
   return (
     <div className="mx-auto w-full max-w-2xl px-4 pb-16 pt-6 sm:pt-10">
       {/* Hero */}
@@ -124,7 +164,7 @@ export function GuestCheckIn() {
                 src={src}
                 alt={t('photoAlt')}
                 loading={i === 0 ? 'eager' : 'lazy'}
-                fetchPriority={i === 0 ? 'high' : 'low'}
+                fetchpriority={i === 0 ? 'high' : 'low'}
                 className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-terracotta-900/30 to-transparent" />
@@ -217,15 +257,24 @@ export function GuestCheckIn() {
         {/* Submit */}
         <button
           onClick={handleSubmit}
-          disabled={!canSubmit}
+          disabled={!canSubmit || isSubmitting}
           className={`mt-8 flex w-full items-center justify-center gap-3 rounded-2xl px-6 py-4 font-ethiopic text-lg font-extrabold transition active:scale-[0.98] ${
-            canSubmit
+            canSubmit && !isSubmitting
               ? 'bg-gradient-to-r from-sunflower-400 to-sunflower-500 text-terracotta-900 hover:from-sunflower-500 hover:to-sunflower-600 card-shadow animate-pulse-glow'
               : 'cursor-not-allowed bg-cream-300 text-terracotta-400'
           }`}
         >
-          <Sparkles className="h-5 w-5" />
-          {t('submitBtn')}
+          {isSubmitting ? (
+            <>
+              <span className="h-5 w-5 animate-spin rounded-full border-2 border-terracotta-900 border-t-transparent" />
+              Registering...
+            </>
+          ) : (
+            <>
+              <Sparkles className="h-5 w-5" />
+              {t('submitBtn')}
+            </>
+          )}
         </button>
         {!allAnswered && (
           <p className="mt-3 text-center text-sm text-terracotta-500">

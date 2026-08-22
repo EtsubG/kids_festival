@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import {
   LogOut,
   Search,
@@ -10,6 +10,8 @@ import {
   AlertTriangle,
   Sparkles,
   PartyPopper,
+  Wifi,
+  WifiOff,
 } from 'lucide-react';
 import { useAuth } from '@/auth';
 import { useParticipants } from '@/store';
@@ -55,7 +57,7 @@ function exportCSV(participants: Participant[], lang: string) {
 
 export function AdminDashboard() {
   const { logout } = useAuth();
-  const { participants, resetAll } = useParticipants();
+  const { participants, loading, error, isOnline, refresh, resetAll } = useParticipants();
   const { t, lang } = useI18n();
   const [search, setSearch] = useState('');
   const [winner, setWinner] = useState<Participant | null>(null);
@@ -63,6 +65,14 @@ export function AdminDashboard() {
   const [showResetModal, setShowResetModal] = useState(false);
   const [resetConfirm, setResetConfirm] = useState('');
   const [confetti, setConfetti] = useState(false);
+
+  // Auto-refresh every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refresh();
+    }, 69000);
+    return () => clearInterval(interval);
+  }, [refresh]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -89,6 +99,17 @@ export function AdminDashboard() {
     setResetConfirm('');
   }
 
+  if (loading && participants.length === 0) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="text-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-sunflower-400 border-t-transparent mx-auto"></div>
+          <p className="mt-4 font-ethiopic text-terracotta-600">Loading participants...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-6">
       <Confetti active={confetti} count={120} />
@@ -101,15 +122,45 @@ export function AdminDashboard() {
           </h1>
           <p className="font-ethiopic text-sm text-terracotta-500">{t('dashSubtitle')}</p>
         </div>
-        <button
-          onClick={handleLogout}
-          className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-2.5 font-ethiopic text-sm font-semibold text-terracotta-700 card-shadow transition hover:bg-terracotta-50 active:scale-95"
-        >
-          <LogOut className="h-4 w-4" />
-          {t('logout')}
-        </button>
+        <div className="flex items-center gap-3">
+          {/* Connection status */}
+          <div className="flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-medium card-shadow">
+            {isOnline ? (
+              <>
+                <Wifi className="h-3.5 w-3.5 text-ethiogreen-500" />
+                <span className="text-ethiogreen-600">Live</span>
+              </>
+            ) : (
+              <>
+                <WifiOff className="h-3.5 w-3.5 text-terracotta-400" />
+                <span className="text-terracotta-500">Offline</span>
+              </>
+            )}
+          </div>
+          <button
+            onClick={handleLogout}
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-2.5 font-ethiopic text-sm font-semibold text-terracotta-700 card-shadow transition hover:bg-terracotta-50 active:scale-95"
+          >
+            <LogOut className="h-4 w-4" />
+            {t('logout')}
+          </button>
+        </div>
       </div>
 
+      {/* Error banner */}
+      {error && (
+        <div className="mb-4 rounded-2xl bg-terracotta-50 border-2 border-terracotta-200 p-4 text-center">
+          <p className="text-sm text-terracotta-600">{error}</p>
+          <button 
+            onClick={refresh}
+            className="mt-2 text-xs font-semibold text-terracotta-700 underline hover:text-terracotta-900"
+          >
+            Retry
+          </button>
+        </div>
+      )}
+
+      {/* ... rest of your AdminDashboard code remains the same ... */}
       {/* Counter + reset */}
       <div className="mb-6 grid gap-4 sm:grid-cols-3">
         <div className="rounded-2xl bg-gradient-to-br from-sunflower-400 to-sunflower-500 p-5 text-terracotta-900 card-shadow sm:col-span-2">
