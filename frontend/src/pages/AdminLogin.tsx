@@ -154,7 +154,7 @@ export function AdminLogin() {
           </form>
 
           <p className="mt-5 rounded-xl bg-cream-100 px-4 py-3 text-center text-xs text-terracotta-500">
-            {t('loginHint')} <span className="font-mono font-bold text-terracotta-700">festival2026</span>
+            {t('loginHint')} <span className="font-mono font-bold text-terracotta-700">admin</span>
           </p>
         </div>
       </div>
