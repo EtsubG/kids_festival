@@ -32,7 +32,18 @@ export const QUESTIONS: Question[] = [
       { value: 'joy', labelAm: 'የፌስቲቫሉ ደስታ ', labelEn: "The festival's joy & cheers", emoji: '⚡' },
     ],
   },
- 
+  {
+    id: 'q2',
+    titleAm: 'ቤተሰብዎ ወደ ፌስቲቫሉ ሲገቡ የትኛውን የእስክስታ ወይም የደስታ ስሜት ያን፸ባርቃሉ?',
+    titleEn: 'As your family arrives, which festive mood are you bringing?',
+    options: [
+      { value: 'arif', labelAm: 'የትከሻ ወዝወዝ አሪፍ እስክስታ', labelEn: 'Cool shoulder-dancing eskesta', emoji: '💃' },
+      { value: 'gurage', labelAm: 'ፈጣን የጉራጊኛ ጨዋታ', labelEn: 'Fast Gurage dance game', emoji: '🕺' },
+      { value: 'wollo', labelAm: 'የጨዋ የወሎ ወዝወዝ', labelEn: 'Graceful Wollo melody', emoji: '🎶' },
+      { value: 'drum', labelAm: 'በከበሮ የታጀበ አዝማሪ ጨዋታ', labelEn: 'Drum-backed singing game', emoji: '🥁' },
+      { value: 'joy', labelAm: 'የፌስቲቫሉ ደስታ ', labelEn: "The festival's joy & cheers", emoji: '⚡' },
+    ],
+  },
   {
     id: 'q3',
     titleAm: 'የልጅዎ ዋና አላማ ዛሬ ምንድነው?',
