@@ -24,7 +24,7 @@ const STRINGS: Record<string, Record<Lang, string>> = {
   'heroTitle1': { am: 'የበጎ ፈቃድ አገልግሎት ማጠናቀቂያ', en: 'Volunteer Service' },
   'heroTitle2': { am: 'የልጆች ፌስቲቫል!', en: "Children's Festival!" },
   'heroSubtitle': {
-    am: 'ውድ ቤተሰቦች፣ ልጆቻችሁን በእኛ እጅ ስላደራችሁን እና ዓመቱን ሙሉ አብራችሁን ስለቆያችሁ ከልብ እናመሰግናለን። ዛሬ አብረን እንደስ፣ እንጫወት እና ትዝታ እንፍጠር።',
+    am: 'ውድ ቤተሰቦች፣ ልጆቻችሁን በእኛ እጅ ስላሳደራችሁን እና ከረምቱን ሙሉ አብራችሁን ስለቆያችሁ ከልብ እናመሰግናለን። ዛሬ አብረን እንደስት፣ እንጫወት እና ትዝታ እንፍጠር።',
     en: 'Dear families, thank you from the bottom of our hearts for trusting us with your children and spending the year by our side. Today let us celebrate, play, and make memories together.',
   },
   'photoAlt': {
@@ -34,7 +34,7 @@ const STRINGS: Record<string, Record<Lang, string>> = {
 
   // Guest - form
   'nameLabel': { am: 'የወላጅ / የእንግዳ ስም', en: 'Parent / Guest Name' },
-  'namePlaceholder': { am: 'ስምዎን ያስገባ...', en: 'Enter your name...' },
+  'namePlaceholder': { am: 'ስምዎን አስገቡ...', en: 'Enter your name...' },
   'nameError': { am: 'እባክዎ ስምዎን ያስገቡ።', en: 'Please enter your name.' },
   'submitBtn': { am: 'የእድል ቁጥሬን አውጣ!', en: 'Get My Lucky Number!' },
   'answerAll': { am: 'ሁሉንም ጥያቄዎች ይምልሱ።', en: 'Please answer all questions.' },
@@ -92,7 +92,7 @@ const STRINGS: Record<string, Record<Lang, string>> = {
   },
   'typeDelete': { am: 'ለመቀጠል DELETE ይተይቡ', en: 'Type DELETE to continue' },
   'cancelBtn': { am: 'ይቅር', en: 'Cancel' },
-  'deleteBtn': { am: 'አፅድ / Delete', en: 'Delete' },
+  'deleteBtn': { am: 'አፅዳ / Delete', en: 'Delete' },
   'exportBefore': { am: 'ከመሰረዝዎ በፊት CSV አውርድ', en: 'Download CSV before clearing' },
 
   // Wheel

@@ -29,20 +29,10 @@ export const QUESTIONS: Question[] = [
       { value: 'coffee', labelAm: 'የጠዋት ኮስታራ ቡና', labelEn: 'Morning coffee', emoji: '☕' },
       { value: 'bread', labelAm: 'ትኩስ ዳቦ እና ሻይ', labelEn: 'Fresh bread & tea', emoji: '🥖' },
       { value: 'shiro', labelAm: 'የዕለቱ ሽሮ እና ጉርሻ', labelEn: "Today's shiro & gursha", emoji: '🍲' },
-      { value: 'joy', labelAm: 'የፌስቲቫሉ ደስታ እና እልልታ', labelEn: "The festival's joy & cheers", emoji: '⚡' },
+      { value: 'joy', labelAm: 'የፌስቲቫሉ ደስታ ', labelEn: "The festival's joy & cheers", emoji: '⚡' },
     ],
   },
-  {
-    id: 'q2',
-    titleAm: 'ቤተሰብዎ ወደ ፌስቲቫሉ ሲገቡ የትኛውን የእስክስታ ወይም የደስታ ስሜት ያን፸ባርቃሉ?',
-    titleEn: 'As your family arrives, which festive mood are you bringing?',
-    options: [
-      { value: 'arif', labelAm: 'የትከሻ ወዝወዝ አሪፍ እስክስታ', labelEn: 'Cool shoulder-dancing eskesta', emoji: '💃' },
-      { value: 'gurage', labelAm: 'ፈጣን የጉራጊኛ ጨዋታ', labelEn: 'Fast Gurage dance game', emoji: '🕺' },
-      { value: 'wollo', labelAm: 'የጨዋ የወሎ ወዝወዝ', labelEn: 'Graceful Wollo melody', emoji: '🎶' },
-      { value: 'drum', labelAm: 'በከበሮ የታጀበ አዝማሪ ጨዋታ', labelEn: 'Drum-backed singing game', emoji: '🥁' },
-    ],
-  },
+ 
   {
     id: 'q3',
     titleAm: 'የልጅዎ ዋና አላማ ዛሬ ምንድነው?',
@@ -50,7 +40,7 @@ export const QUESTIONS: Question[] = [
     options: [
       { value: 'art', labelAm: 'ስዕል መሳል እና ፈጠራ ላይ መሳተፍ', labelEn: 'Drawing and joining creative activities', emoji: '🎨' },
       { value: 'run', labelAm: 'የጫማቸው ሶል እስኪያልቅ መሮጥ', labelEn: "Running until their soles wear out", emoji: '🏃' },
-      { value: 'snack', labelAm: 'መክሰስ እና ጣፋጭ ምግቦችን መብላት', labelEn: 'Snacking and eating treats', emoji: '🍿' },
+      { value: 'snack', labelAm: 'ጣፋጭ ምግቦችን መብላት', labelEn: 'Snacking and eating treats', emoji: '🍿' },
       { value: 'together', labelAm: 'ከአስተማሪዎቻቸው ጎን አለመለየት', labelEn: 'Staying close to their teachers', emoji: '🤝' },
     ],
   },
@@ -71,10 +61,10 @@ export const QUESTIONS: Question[] = [
     titleEn: 'Which emoji best describes your current mood?',
     options: [
       { value: 'happy', labelAm: 'ደስተኛ', labelEn: 'Happy', emoji: '🥳' },
-      { value: 'calm', labelAm: 'ተረጋጋሁ', labelEn: 'Calm', emoji: '☕' },
+      { value: 'calm', labelAm: 'የተረጋጋ', labelEn: 'Calm', emoji: '☕' },
       { value: 'creative', labelAm: 'ፈጠራ ላይ', labelEn: 'Creative', emoji: '🎨' },
-      { value: 'playful', labelAm: 'ዋታ ላይ', labelEn: 'Playful', emoji: '💃' },
-      { value: 'cool', labelAm: 'ዘነጥኩ', labelEn: 'Feeling cool', emoji: '😎' },
+      { value: 'playful', labelAm: 'ጨዋታ ላይ', labelEn: 'Playful', emoji: '💃' },
+      { value: 'cool', labelAm: 'ዘናጭ', labelEn: 'Feeling cool', emoji: '😎' },
     ],
   },
 ];
